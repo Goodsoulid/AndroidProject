@@ -6,21 +6,39 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_diamond_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_diamond_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidProject"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity3"
+            android:exported="false">
+
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <intent-filter>
+                <action android:name="com.example.androidproject.OPEN_ACTIVITY1"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
