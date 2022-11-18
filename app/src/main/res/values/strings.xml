@@ -3,4 +3,9 @@
     <string name="click_me">Click me</string>
     <string name="hello_world">Hello world!!!</string>
     <string name="from_mainActivity">\" from MainActivity\"</string>
+    <string name="display_text">Display text</string>
+    <string name="enter_your_name">enter your name</string>
+    <string name="enter_your_password">enter your password</string>
+    <string name="name_password">Name password</string>
+    <string name="sign_in" />
 </resources>
