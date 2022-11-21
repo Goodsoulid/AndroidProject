@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.androidproject.KotlinActivity.Companion.kotlinActivityStart
 import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity3 : AppCompatActivity() {
@@ -62,6 +63,9 @@ class MainActivity3 : AppCompatActivity() {
             }else if(editText2.text.toString().isEmpty()){
                 layout2.setErrorIconDrawable(R.drawable.ic_warning)
                 editText2.error = "password cant be empty"
+            }else{ kotlinActivityStart(this)
+
+                textView.text  = "Login - ${editText.text.toString()}, Password - ${editText2.text.toString()}"
             }
         }
     }
