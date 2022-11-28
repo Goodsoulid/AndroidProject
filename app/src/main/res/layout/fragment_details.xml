@@ -4,19 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context=".DetailsFragment">
 
 
+    <ImageView
+        android:id="@+id/detailsImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        tools:layout_editor_absoluteX="115dp"
+        tools:layout_editor_absoluteY="96dp" />
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/detailsName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="YOU ARE IN DETAIL FRAGMENT"
-        android:textColor="@color/black"
-        android:textSize="26sp"
+        android:layout_marginTop="80dp"
+        android:text="dfgdfgdfg"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/detailsImage"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <TextView
+        android:id="@+id/detailsDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fdgdfg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsName"
+        app:layout_constraintVertical_bias="0.133" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
