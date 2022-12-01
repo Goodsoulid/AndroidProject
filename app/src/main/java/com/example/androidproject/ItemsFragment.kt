@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidproject.adapter.ItemsAdapter
@@ -16,6 +17,8 @@ import com.example.androidproject.model.ItemsModel
 class ItemsFragment : Fragment(), ItemsListener {
 
     private lateinit var itemsAdapter: ItemsAdapter
+
+    private val viewModel: ItemsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,81 +36,39 @@ class ItemsFragment : Fragment(), ItemsListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = itemsAdapter
 
-        val listItems = listOf<ItemsModel>(
-            ItemsModel(
-                R.drawable.android,
-                "Android",
-                "26.02.2023"
+        viewModel.getData()
 
-            ),
-            ItemsModel(R.drawable.ios,
-                "Ios",
-                "26.02.2023"
-            ),
-            ItemsModel(
-                R.drawable.flutter,
-                "Flutter",
-                "26.02.2023"
-            ),
-            ItemsModel(
-                R.drawable.xamarin,
-                "Xamarin",
-                "26.02.2023"
-            ),
-            ItemsModel(
-                R.drawable.banana,
-                ".NET",
-                "26.02.2023"
-            ),
-            ItemsModel(
-                R.drawable.banana,
-                "C++",
-                "26.02.2023"
-            ),
-            ItemsModel(
-                R.drawable.banana,
-                "Goland",
-                "26.02.2023"
-            ),
-            ItemsModel(
-                R.drawable.banana,
-                "Ruby on Rains",
-                "26.02.2023"
-            ),
-            ItemsModel(
-                R.drawable.banana,
-                "JS",
-                "26.02.2023"
-            ),
-        )
+        viewModel.items.observe(viewLifecycleOwner){ listItems ->
+            itemsAdapter.submitList(listItems)
+        }
 
-        itemsAdapter.submitList(listItems)
+        viewModel.msg.observe(viewLifecycleOwner){ msg ->
+            Toast.makeText(context, msg ,Toast.LENGTH_SHORT).show()
+        }
+        viewModel.bundle.observe(viewLifecycleOwner){navBundle ->
+            val  detailsFragment = DetailsFragment()
+            val bundle = Bundle()
+            bundle.putString("name", navBundle.name)
+            bundle.putString("date", navBundle.date)
+            bundle.putInt("imageView", navBundle.image)
+            detailsFragment.arguments = bundle
 
+            Toast.makeText(context, "called", Toast.LENGTH_SHORT).show()
 
-
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.activity_container, detailsFragment)
+                //.add(R.id.activity_container, detailsFragment)
+                .addToBackStack("Details")
+                .commit()
+        }
     }
 
     override fun onClick() {
-        Toast.makeText(context, "ImageView clicked",Toast.LENGTH_SHORT).show()
+        viewModel.imageViewClicked()
     }
 
     override fun onElementSelected(name: String, date: String, imageView: Int) {
-        val detailsFragment = DetailsFragment()
-        val bundle = Bundle()
-        bundle.putString("name", name) //передавать аргументы из фрагмента
-        bundle.putString("date", date)
-        bundle.putInt("ImageView", imageView)
-        detailsFragment.arguments = bundle
-
-        //TODO add метод мы больше не используем
-        //теперь мы всегда будем использовать replace
-        //replace всегда будет иметь или addToBackStack, чтобы
-        //мочь вернуться назад или де его не будет, чтобы
-        //мы вернулись назад.
-        parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.activity_container,detailsFragment)
-            .addToBackStack("Details")
-            .commit()
+       viewModel.elementClicked(name, date, imageView)
     }
 }
