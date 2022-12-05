@@ -10,9 +10,14 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.androidproject.BundleConstants.IMAGE_VIEW
 import com.example.androidproject.adapter.ItemsAdapter
 import com.example.androidproject.listener.ItemsListener
 import com.example.androidproject.model.ItemsModel
+
+//не использовать
+const val NAME = "name"
+
 
 class ItemsFragment : Fragment(), ItemsListener {
 
@@ -43,24 +48,30 @@ class ItemsFragment : Fragment(), ItemsListener {
         }
 
         viewModel.msg.observe(viewLifecycleOwner){ msg ->
-            Toast.makeText(context, msg ,Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(msg),Toast.LENGTH_SHORT).show()
+
         }
+
         viewModel.bundle.observe(viewLifecycleOwner){navBundle ->
-            val  detailsFragment = DetailsFragment()
-            val bundle = Bundle()
-            bundle.putString("name", navBundle.name)
-            bundle.putString("date", navBundle.date)
-            bundle.putInt("imageView", navBundle.image)
-            detailsFragment.arguments = bundle
+            if(navBundle !=null){
+                val  detailsFragment = DetailsFragment()
+                val bundle = Bundle()
+                bundle.putString(NAME, navBundle.name)
+                bundle.putString(DATE, navBundle.date)
+                bundle.putInt(BundleConstants.IMAGE_VIEW, navBundle.image)
+                detailsFragment.arguments = bundle
 
-            Toast.makeText(context, "called", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "called", Toast.LENGTH_SHORT).show()
 
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.activity_container, detailsFragment)
-                //.add(R.id.activity_container, detailsFragment)
-                .addToBackStack("Details")
-                .commit()
+                parentFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.activity_container, detailsFragment)
+                    //.add(R.id.activity_container, detailsFragment)
+                    .addToBackStack("Details")
+                    .commit()
+                //Это конец нашего экшена
+                viewModel.userNavigated()
+            }
         }
     }
 
@@ -70,5 +81,12 @@ class ItemsFragment : Fragment(), ItemsListener {
 
     override fun onElementSelected(name: String, date: String, imageView: Int) {
        viewModel.elementClicked(name, date, imageView)
+    }
+
+
+    companion object {
+        //мы можем это использовать, потому что видим откуда это берем
+        const val DATE = "date"
+        const val NAME = "name"
     }
 }
