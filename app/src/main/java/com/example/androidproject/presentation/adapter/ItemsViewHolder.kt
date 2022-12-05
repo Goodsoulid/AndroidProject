@@ -1,29 +1,28 @@
-package com.example.androidproject.adapter
+package com.example.androidproject.presentation.adapter
 
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidproject.R
-import com.example.androidproject.listener.ItemsListener
+import com.example.androidproject.databinding.ItemFruitBinding
+import com.example.androidproject.presentation.adapter.listener.ItemsListener
 import com.example.androidproject.model.ItemsModel
 import org.w3c.dom.Text
 
 class ItemsViewHolder(
-    private val view: View,
+    private val viewBinding: ItemFruitBinding,
     private val itemsListener: ItemsListener
-): RecyclerView.ViewHolder(view) {
+): RecyclerView.ViewHolder(viewBinding.root) {
 
     fun bind(itemsModel: ItemsModel) {
-        val name = view.findViewById<TextView>(R.id.textView2)
-        val imageView = view.findViewById<ImageView>(R.id.image)
-        val date = view.findViewById<TextView>(R.id.textView3)
 
-        name.text = itemsModel.name
-        imageView.setBackgroundResource(itemsModel.image)
-        date.text = itemsModel.date
 
-        imageView.setOnClickListener {
+        viewBinding.tvName.text = itemsModel.name
+        viewBinding.ivImage.setBackgroundResource(itemsModel.image)
+        viewBinding.tvDate.text = itemsModel.date
+
+        viewBinding.ivImage.setOnClickListener {
             itemsListener.onClick()
         }
 
