@@ -1,4 +1,4 @@
-package com.example.androidproject
+package com.example.androidproject.presentation.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.androidproject.R
 import com.example.androidproject.adapter.ItemsAdapter
-import com.example.androidproject.listener.ItemsListener
+import com.example.androidproject.adapter.listener.ItemsListener
+import com.example.androidproject.data.ItemsRepositoryImpl
+import com.example.androidproject.databinding.FragmentItemsBinding
+import com.example.androidproject.domain.ItemsInteractor
+import com.example.androidproject.utils.BundleConstants
 
 //не использовать
 const val NAME = "name"
@@ -18,16 +23,22 @@ const val NAME = "name"
 
 class ItemsFragment : Fragment(), ItemsListener {
 
+    private var _viewBinding:FragmentItemsBinding? = null
+    private val viewBinding get() = _viewBinding!!
+
     private lateinit var itemsAdapter: ItemsAdapter
 
-    private val viewModel: ItemsViewModel by viewModels()
+    private val viewModel: ItemsViewModel by viewModels{
+        ItemsViewModelsFactory(ItemsInteractor(ItemsRepositoryImpl()))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        return inflater.inflate(R.layout.fragment_items, container, false)
+        _viewBinding = FragmentItemsBinding.inflate(inflater)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,19 +64,14 @@ class ItemsFragment : Fragment(), ItemsListener {
             if(navBundle !=null){
                 val  detailsFragment = DetailsFragment()
                 val bundle = Bundle()
-                bundle.putString(NAME, navBundle.name)
-                bundle.putString(DATE, navBundle.date)
+                bundle.putString(BundleConstants.NAME, navBundle.name)
+                bundle.putString(BundleConstants.DATE, navBundle.date)
                 bundle.putInt(BundleConstants.IMAGE_VIEW, navBundle.image)
                 detailsFragment.arguments = bundle
 
                 Toast.makeText(context, "called", Toast.LENGTH_SHORT).show()
 
-                parentFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.activity_container, detailsFragment)
-                    //.add(R.id.activity_container, detailsFragment)
-                    .addToBackStack("Details")
-                    .commit()
+                NavigationExt.fmReplace(parentFragmentManager, detailsFragment, true)
                 //Это конец нашего экшена
                 viewModel.userNavigated()
             }
@@ -81,9 +87,5 @@ class ItemsFragment : Fragment(), ItemsListener {
     }
 
 
-    companion object {
-        //мы можем это использовать, потому что видим откуда это берем
-        const val DATE = "date"
-        const val NAME = "name"
-    }
+
 }
