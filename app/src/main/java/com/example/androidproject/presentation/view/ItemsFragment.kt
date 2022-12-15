@@ -16,11 +16,12 @@ import com.example.androidproject.data.ItemsRepositoryImpl
 import com.example.androidproject.databinding.FragmentItemsBinding
 import com.example.androidproject.domain.ItemsInteractor
 import com.example.androidproject.utils.BundleConstants
+import dagger.hilt.android.AndroidEntryPoint
 
 //не использовать
 const val NAME = "name"
 
-
+@AndroidEntryPoint
 class ItemsFragment : Fragment(), ItemsListener {
 
     private var _viewBinding:FragmentItemsBinding? = null
@@ -28,9 +29,7 @@ class ItemsFragment : Fragment(), ItemsListener {
 
     private lateinit var itemsAdapter: ItemsAdapter
 
-    private val viewModel: ItemsViewModel by viewModels{
-        ItemsViewModelsFactory(ItemsInteractor(ItemsRepositoryImpl()))
-    }
+    private val viewModel: ItemsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
