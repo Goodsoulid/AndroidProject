@@ -1,8 +1,9 @@
-package com.example.androidproject.presentation.view
+package com.example.androidproject.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.androidproject.domain.ItemsInteractor
+import com.example.androidproject.domain.items.ItemsInteractor
+import com.example.androidproject.presentation.view.home.ItemsViewModel
 
 class ItemsViewModelsFactory(private  val interactor: ItemsInteractor): ViewModelProvider.Factory {
 
