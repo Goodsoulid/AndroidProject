@@ -11,14 +11,16 @@ import com.example.androidproject.databinding.FragmentDetailsBinding
 import com.example.androidproject.presentation.view.auth.LoginFragment
 import com.example.androidproject.utils.BundleConstants
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), DetailsView {
 
     private var _viewBinding: FragmentDetailsBinding? = null
     private val viewBinding get() = _viewBinding!!
 
-    private val viewModel: DetailsViewModel by viewModels()
+    @Inject
+    lateinit var detailsPresenter: DetailsPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +33,8 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        detailsPresenter.setView(this)
+
 
         val bundle = arguments
         bundle?.let { safeBundle ->
@@ -39,19 +43,29 @@ class DetailsFragment : Fragment() {
             val date = safeBundle.getString(BundleConstants.DATE)
             val image = safeBundle.getInt(BundleConstants.IMAGE_VIEW)
 
-            viewBinding.detailsName.text = name
-            viewBinding.detailsDate.text = date
-            viewBinding.detailsImage.setBackgroundResource(image)
+            detailsPresenter.getArguments(
+                safeBundle.getString(BundleConstants.NAME),
+                safeBundle.getString(BundleConstants.DATE),
+                safeBundle.getInt(BundleConstants.IMAGE_VIEW)
+            )
         }
+
+
 
         viewBinding.btnLogout.setOnClickListener {
-            viewModel.logoutUser()
+            detailsPresenter.logoutUser()
         }
+    }
 
-        viewModel.nav.observe(viewLifecycleOwner){
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.activity_container, LoginFragment())
-                .commit()
-        }
+    override fun userLoggedOut() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.activity_container, LoginFragment())
+            .commit()
+    }
+
+    override fun displayItemData(name: String, date: String, imageView: Int) {
+        viewBinding.detailsName.text = name
+        viewBinding.detailsDate.text = date
+        viewBinding.detailsImage.setBackgroundResource(imageView)
     }
 }
